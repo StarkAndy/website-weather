@@ -7,13 +7,20 @@ const hbs = require('hbs');
 const app=express();
 const publicDirectoryName=path.join(__dirname,'../public');
 const partialsDirectoryPath=path.join(__dirname,'../public/templates/partials');
+const styles=path.join(__dirname,'../stylesheets/css');
+
 
 //registering views and partials
 app.set('view engine','hbs');
 app.set('views', path.join(__dirname, '../public/templates/views'));
-hbs.registerPartials(partialsDirectoryPath);
 
-//app.use(express.static(publicDirectoryName));
+
+const publicPath = path.resolve(__dirname, "public/templates");
+
+hbs.registerPartials(partialsDirectoryPath);
+//hbs.registerPartial(styles);
+
+app.use(express.static(publicDirectoryName));
 
 
 app.get('',(req,res)=>{
