@@ -2,15 +2,19 @@
 <html>
 
 <head>
-   <link style="stylesheet" href="../../css/styles.css"/>
+      <title>Help</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="icon" href="../../image/weather.png">
 </head>
 
 <body>
-    {{>header}}
- <h1>
-     {{information}}
- </h1>
- 
- {{>footer}}
+    <div class="mainContainer">
+        {{>header}}
+        <p>
+            {{information}}
+        </p>
+    </div>
+    {{>footer}}
 </body>
+
 </html>

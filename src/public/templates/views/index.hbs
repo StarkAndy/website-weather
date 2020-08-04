@@ -2,17 +2,31 @@
 <html>
 
 <head>
- <link rel="stylesheet" href="../../css/styles.css">   
- <script src="../js/index.js" ></script>
+ <title>Weather</title>
+ <link rel="stylesheet" href="../../css/styles.css">  
+ <link rel="icon" href="../../image/weather.png">
+
+
 </head>
 
 <body>
 
-{{>header}}
- <h1>
-    {{title}}
- </h1>
+<div class="mainContainer">
+  {{>header}}
+  <p>{{weatherReport}}</p>
+  <form>
+    <input placeholder="Enter City"/>
+    <button>Submit</button>
+  </form>
+  <p id="messageError">
 
- {{>footer}}
+  </p>
+  <p id="messageReport">
+  </p>
+</div>
+
+{{>footer}}
+
+ <script src="../js/index.js" ></script>
 </body>
 </html>

@@ -1,4 +1,6 @@
 const request = require('request');
+const { response } = require('express');
+const fetch = require("node-fetch");
 const url = 'http://api.weatherstack.com/current?access_key=443ae1f90345503e4994dd8203a8ffd5&query=40.8443876,-74.6203679&units=m';
 const mapBoxUrl = 'https://api.mapbox.com/geocoding/v5/mapbox.places/Los%20Angeles.json?access_token=pk.eyJ1IjoiYW5keXN0YXJrIiwiYSI6ImNrZDJoOTZkbzFkNHozMW91Z3NleThrNDQifQ.qtQyrR8A20xmewJk59sZVg';
 
@@ -36,26 +38,36 @@ const address=process.argv[2];
 const fetchLatLong = (address, callback) => {
     const mapBoxURL = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + encodeURIComponent(address).json + "?access_token=pk.eyJ1IjoiYW5keXN0YXJrIiwiYSI6ImNrZDJoOTZkbzFkNHozMW91Z3NleThrNDQifQ.qtQyrR8A20xmewJk59sZVg";
    
-    request({ url: mapBoxUrl, json: true }, (error, response) => {
-        if (error) {
-            callback("Network request error");
-            console.log("Nework request error")
-        } else if (response.body.error) {
-            console.log("Unable to fetch address");
-            callback("Unable to fetch address");
-        } else {
-            const latitude = response.body.features[0].center[0];
-            const longitude = response.body.features[0].center[1];
-            console.log('latitude :', latitude)
-            callback(null, latitude, longitude)
-        }
-    })
+    // request({ url: mapBoxUrl, json: true }, (error, response) => {
+    //     if (error) {
+    //         callback("Network request error");
+    //         console.log("Nework request error")
+    //     } else if (response.body.error) {
+    //         console.log("Unable to fetch address");
+    //         callback("Unable to fetch address");
+    //     } else {
+    //         const latitude = response.body.features[0].center[0];
+    //         const longitude = response.body.features[0].center[1];
+    //         console.log('latitude :', latitude)
+    //         callback(null, latitude, longitude)
+    //     }
+    // })
+
+  fetch(mapBoxUrl).then((response)=>{
+      response.json().then((data)=>{
+        const latitude = response.body.features[0].center[0];
+        const longitude = response.body.features[0].center[1];
+        console.log('latitude :', latitude)
+        callback(null, latitude, longitude)
+      })
+  }).then((error)=>{
+      callback(error,null)
+  })
 }
 
 /** callback function for fetching weatherReport **/
 const fetchWeatherReport = (latitude, longitude, callback) => {
     const weatherURL = "http://api.weatherstack.com/current?access_key=443ae1f90345503e4994dd8203a8ffd5&query=40.8443876,-74.6203679&units=m";
-
     request({ url: weatherURL, json: true }, (error, response) => {
         if (error) {
             console.log("Unable to fetch the weather report");
@@ -70,7 +82,7 @@ const fetchWeatherReport = (latitude, longitude, callback) => {
 }
 
 /** callback function function **/
-fetchLatLong( address !== undefined?address:'Nepal', (error, latitude, longitude) => {
+const fetchTest=( address !== undefined?address:'Nepal',(error, latitude, longitude) => {
     fetchWeatherReport(latitude, longitude, (error, weatherReport) => {
         if (error) {
             console.log(error);
@@ -81,4 +93,29 @@ fetchLatLong( address !== undefined?address:'Nepal', (error, latitude, longitude
     )
 });
 
-module.exports = fetchLatLong;
+const fetchWeatherInformation=(address,callback)=>{
+
+    fetchLatLong(address,(error,latitude,longitude)=>{
+        if(error){
+            callback(null,{})
+        }else{
+          /**fetching latitude longitude **/  
+
+          fetchWeatherReport(latitude,longitude,(error,weatherReport)=>{
+            callback(null,{
+                latitude:latitude,
+                longitude:longitude,
+                weatherReport:weatherReport
+            })
+          })
+        }
+    })
+
+
+}
+
+fetchWeatherInformation('TEST',()=>{
+   console.log('test'); 
+})
+
+module.exports = fetchWeatherInformation;
