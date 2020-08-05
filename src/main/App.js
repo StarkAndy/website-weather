@@ -4,6 +4,7 @@ const hbs = require('hbs');
 const weatherRequest=require('../utils/request');
 const fetchWeatherInformation = require('../utils/request');
 const e = require('express');
+const port= process.env.PORT || 3000;
 
 
 //directory for the paths
@@ -84,6 +85,6 @@ app.get('*',(req,res)=>{
     res.send('404 oage not found');
 })
 
-app.listen(3000,()=>{
-    console.log("Port 3000 is listeninig")
+app.listen(port,()=>{
+    console.log("Port"+port+"is listeninig")
 })
