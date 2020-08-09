@@ -27,7 +27,11 @@
    }(document, 'script', 'facebook-jssdk'));
 
 
+  debugger;
+
    FB.getLoginStatus(function(response) {
+
+    console.log(response);
     alert(response);
 });
 </script>
@@ -38,6 +42,12 @@
 <body>
 
 <div class="mainContainer">
+
+  <fb:login-button 
+  scope="public_profile,email"
+  onlogin="checkLoginState();">
+</fb:login-button>
+
   {{>header}}
   <p>{{weatherReport}}</p>
   <form>

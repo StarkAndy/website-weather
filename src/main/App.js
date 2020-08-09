@@ -28,7 +28,7 @@ app.use(express.static(publicDirectoryName));
 
 
 app.get('',(req,res)=>{
-    res.render('index',{title:'Weather',footerLabel:'Creatd by Gyanesh'});
+    res.render('index',{title:'My Blog',footerLabel:'Creatd by Gyanesh'});
 })
 
 
